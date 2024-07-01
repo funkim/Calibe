@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('../../public/fonts/Panchang_Complete/Fonts/WEB/css/panchang.css');
+@import url('../../public/fonts/Supreme_Complete/Fonts/WEB/css/supreme.css');
+@import url('../../public/fonts/Technor_Complete/Fonts/WEB/css/technor.css');
