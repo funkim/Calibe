@@ -3,13 +3,13 @@ import Link from 'next/link';
 export default function Header() {
   return (
     <header className="bg-white shadow-sm">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className=" mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex font-brand">
-            <Link href="/" className="flex-shrink-0 flex items-center">
+            <Link href="/" className="flex-shrink-0 flex items-center text-xl">
               Calibe
             </Link>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8 ">
+            <div className="hidden xl:justify-center sm:ml-6  lg:ml-72 sm:flex sm:space-x-8  ">
               <Link href="/men" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-gray-300">
                 Men
               </Link>
@@ -24,7 +24,7 @@ export default function Header() {
               </Link>
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
+          <div className="ml-6 flex items-center">
             <button
               type="button"
               className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
