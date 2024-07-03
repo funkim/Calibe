@@ -1,11 +1,12 @@
-import Hero from '../components/hero';
-import ProductGrid from '../components/productGrid';
+'use client'
+import Hero from '../components/hero'
+import ProductGrid from '../components/productGrid'
 
 export default function Home() {
-  return (
-    <>
-      <Hero />
-      <ProductGrid />
-    </>
-  );
+    return (
+        <>
+            <Hero />
+            <ProductGrid category={1} />
+        </>
+    )
 }

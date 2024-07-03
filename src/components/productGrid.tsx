@@ -1,74 +1,106 @@
-'use client';
-import { useState, useEffect } from 'react';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
+'use client'
+import { useState, useEffect, createContext } from 'react'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import 'react-lazy-load-image-component/src/effects/blur.css'
 
-async function fetchStoreItems() {
-  try {
-    const response = await fetch('https://fakestoreapi.com/products');
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+export async function fetchStoreItems() {
+    try {
+        const response = await fetch('https://fakestoreapi.com/products')
+        if (!response.ok) {
+            throw new Error('Network response was not ok')
+        }
+        const data = await response.json()
+
+        const filteredItems = data.filter(
+            (item) =>
+                item.category === "men's clothing" ||
+                item.category === 'jewelery' ||
+                item.category === "women's clothing"
+        )
+
+        const menItems = data.filter(
+            (item) => item.category === "men's clothing"
+        )
+
+        const womenItems = data.filter(
+            (item) => item.category === "women's clothing"
+        )
+
+        const jeweleryItems = data.filter(
+            (item) => item.category === 'jewelery'
+        )
+
+        const itemlist = [filteredItems, menItems, womenItems, jeweleryItems]
+
+        return itemlist
+    } catch (error) {
+        console.error('Error fetching store items:', error)
+        return []
     }
-    const data = await response.json();
-    const filteredItems = data.filter(
-      (item) => item.category === "men's clothing" || item.category === 'jewelery' || item.category === "women's clothing"
-    );
-    return filteredItems;
-  } catch (error) {
-    console.error('Error fetching store items:', error);
-    return [];
-  }
 }
 
-function ProductCard({ item }) {
-  return (
-    <div key={item.id} className="flex flex-col justify-between h-full p-4 rounded-lg">
-      <div className="overflow-hidden h-48 flex items-center justify-center">
-        <LazyLoadImage src={item.image} alt={item.title} effect="blur" className="max-h-48 object-cover rounded" />
-      </div>
-      <h2 className="text-sm text-center text-gray-700 mt-4">{item.title}</h2>
-      <p className="text-lg text-center font-medium text-gray-900 mt-1">${item.price}</p>
-    </div>
-  );
-}
-
-export default function ProductGrid() {
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    async function loadItems() {
-      setIsLoading(true);
-      const fetchedItems = await fetchStoreItems();
-      setItems(fetchedItems);
-      setIsLoading(false);
-    }
-    loadItems().catch((err) => setError(err.message));
-  }, []);
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  return (
-    <div className="bg-white font-body">
-      <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h2 className="sr-only">Products</h2>
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 gap-y-10 gap-x-20 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-20">
-              {items.slice(0, 3).map((item) => (
-                <ProductCard key={item.id} item={item} />
-              ))}
+export function ProductCard({ item }) {
+    return (
+        <div
+            key={item.id}
+            className="flex h-full flex-col justify-between rounded-lg p-4"
+        >
+            <div className="flex h-48 items-center justify-center overflow-hidden">
+                <LazyLoadImage
+                    src={item.image}
+                    alt={item.title}
+                    effect="blur"
+                    className="max-h-48 rounded object-cover"
+                />
             </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
+            <h2 className="mt-4 text-center text-sm text-gray-700">
+                {item.title}
+            </h2>
+            <p className="mt-1 text-center text-lg font-medium text-gray-900">
+                ${item.price}
+            </p>
+        </div>
+    )
+}
+
+export default function ProductGrid({ category }) {
+    const [items, setItems] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState(null)
+
+    useEffect(() => {
+        async function loadItems() {
+            setIsLoading(true)
+            const fetchedItems = await fetchStoreItems()
+            setItems(fetchedItems[category])
+            setIsLoading(false)
+        }
+        loadItems().catch((err) => setError(err.message))
+    }, [])
+
+    if (error) {
+        return <div>Error: {error}</div>
+    }
+
+    console.log(items)
+    return (
+        <div className="bg-white font-body">
+            <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+                <h2 className="sr-only">Products</h2>
+                {isLoading ? (
+                    <div className="flex h-64 items-center justify-center">
+                        <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-gray-900"></div>
+                    </div>
+                ) : (
+                    <>
+                        <div className="grid grid-cols-1 gap-x-20 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-20">
+                            {items.slice(0, 3).map((item) => (
+                                <ProductCard key={item.id} item={item} />
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
+        </div>
+    )
 }
