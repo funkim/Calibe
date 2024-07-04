@@ -1,11 +1,14 @@
-import { useState, useEffect } from 'react'
-
-export default function CartPopup({ isOpen, onClose, cartItems = [] }) {
+'use client'
+import { useContext } from 'react'
+import { CartContext } from './cartContext'
+import { RemoveFromCartButton } from './cartButton'
+export default function CartPopup({ isOpen, onClose }) {
     if (!isOpen) return null
+    const { cartItems, cartTotal } = useContext(CartContext)
 
     return (
         <div className="fixed inset-0 z-50 h-full w-full overflow-y-auto bg-gray-600 bg-opacity-50">
-            <div className="relative right-0 top-0 h-full w-full overflow-y-auto bg-white shadow-xl md:w-96">
+            <div className="absolute right-0 top-0 h-full w-full overflow-y-auto bg-white shadow-xl md:relative md:w-96 md:animate-enterIn">
                 <div className="flex items-center justify-between border-b p-4">
                     <h2 className="text-lg font-semibold">Your Cart</h2>
                     <button
@@ -34,6 +37,7 @@ export default function CartPopup({ isOpen, onClose, cartItems = [] }) {
                             key={item.id}
                             className="mb-4 flex items-center justify-between"
                         >
+                            <RemoveFromCartButton product={item} />
                             <div>
                                 <h3 className="text-sm font-medium">
                                     {item.title}
@@ -47,6 +51,11 @@ export default function CartPopup({ isOpen, onClose, cartItems = [] }) {
                             </p>
                         </div>
                     ))}
+                    <p className="font-body">
+                        <p className="font-body">
+                            Total: ${cartTotal(cartItems).toFixed(2)}
+                        </p>
+                    </p>
                 </div>
                 <div className="border-t p-4">
                     <button className="w-full rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700">

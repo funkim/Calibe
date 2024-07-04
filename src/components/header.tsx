@@ -6,11 +6,12 @@ import CartPopup from './cartPopup'
 export default function Header() {
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [isCartOpen, setIsCartOpen] = useState(false)
+    const [isItemAdded, setIsItemAdded] = useState(false)
 
     return (
         <header className="bg-white shadow-sm">
-            <nav className="mx-auto px-4 font-brand sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
+            <nav className="mx-auto px-4 font-brand lg:max-w-7xl">
+                <div className="flex h-16 items-center justify-between border-0 border-b-2 border-gray-300">
                     <Link href="/" className="flex items-center text-xl">
                         Calibe
                     </Link>
@@ -71,6 +72,13 @@ export default function Header() {
                     </div>
                 </div>
             </nav>
+            <div className="flex justify-end">
+                {isItemAdded ? (
+                    <div className="animate-popUp px-8">
+                        <p>Item Added!</p>
+                    </div>
+                ) : null}
+            </div>
             <CartPopup
                 isOpen={isCartOpen}
                 onClose={() => setIsCartOpen(false)}
