@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 import Link from 'next/link'
+import { Product } from './cartButton'
 
-export async function fetchStoreItems() {
+export async function fetchStoreItems(): Promise<Product[][]> {
     try {
         const response = await fetch('https://fakestoreapi.com/products')
         if (!response.ok) {
@@ -13,22 +14,22 @@ export async function fetchStoreItems() {
         const data = await response.json()
 
         const filteredItems = data.filter(
-            (item) =>
+            (item: Product) =>
                 item.category === "men's clothing" ||
                 item.category === 'jewelery' ||
                 item.category === "women's clothing"
         )
 
         const menItems = data.filter(
-            (item) => item.category === "men's clothing"
+            (item: Product) => item.category === "men's clothing"
         )
 
         const womenItems = data.filter(
-            (item) => item.category === "women's clothing"
+            (item: Product) => item.category === "women's clothing"
         )
 
         const jeweleryItems = data.filter(
-            (item) => item.category === 'jewelery'
+            (item: Product) => item.category === 'jewelery'
         )
 
         const itemlist = [filteredItems, menItems, womenItems, jeweleryItems]
@@ -40,7 +41,7 @@ export async function fetchStoreItems() {
     }
 }
 
-export function ProductCard({ item }) {
+export function ProductCard({ item }: { item: Product }) {
     return (
         <Link href={`/product/${item.id}`}>
             <div className="flex h-full flex-col justify-between rounded-lg p-4">
@@ -63,20 +64,32 @@ export function ProductCard({ item }) {
     )
 }
 
-export default function ProductGrid({ category }) {
-    const [items, setItems] = useState([])
+interface ProductGridProps {
+    category: number
+}
+export default function ProductGrid({ category }: ProductGridProps) {
+    const [items, setItems] = useState<Product[]>([])
     const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         async function loadItems() {
             setIsLoading(true)
-            const fetchedItems = await fetchStoreItems()
-            setItems(fetchedItems[category])
-            setIsLoading(false)
+            try {
+                const fetchedItems = await fetchStoreItems()
+                setItems(fetchedItems[category])
+            } catch (err) {
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : 'An unknown error occurred'
+                )
+            } finally {
+                setIsLoading(false)
+            }
         }
-        loadItems().catch((err) => setError(err.message))
-    }, [])
+        loadItems()
+    }, [category])
 
     if (error) {
         return <div>Error: {error}</div>

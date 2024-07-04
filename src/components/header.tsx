@@ -4,9 +4,9 @@ import { useState } from 'react'
 import CartPopup from './cartPopup'
 
 export default function Header() {
-    const [isProfileOpen, setIsProfileOpen] = useState(false)
-    const [isCartOpen, setIsCartOpen] = useState(false)
-    const [isItemAdded, setIsItemAdded] = useState(false)
+    const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false)
+    const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
+    const [isItemAdded, setIsItemAdded] = useState<boolean>(false)
 
     return (
         <header className="bg-white shadow-sm">

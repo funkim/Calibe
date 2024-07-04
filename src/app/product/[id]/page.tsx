@@ -2,8 +2,9 @@ import Image from 'next/image'
 import { Metadata } from 'next'
 import StarRating from '@/components/starRating'
 import { AddToCartButton } from '../../../components/cartButton'
+import { Product } from '../../../components/cartButton'
 
-async function getProduct(id: string) {
+async function getProduct(id: string): Promise<Product> {
     const res = await fetch(`https://fakestoreapi.com/products/${id}`)
     if (!res.ok) throw new Error('Failed to fetch product')
     return res.json()

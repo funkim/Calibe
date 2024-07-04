@@ -1,10 +1,14 @@
 'use client'
 import { useContext } from 'react'
-import { CartContext } from './cartContext'
+import { useCart } from './cartContext'
 import { RemoveFromCartButton } from './cartButton'
-export default function CartPopup({ isOpen, onClose }) {
+interface CartPopupProps {
+    isOpen: boolean
+    onClose: () => void
+}
+export default function CartPopup({ isOpen, onClose }: CartPopupProps) {
     if (!isOpen) return null
-    const { cartItems, cartTotal } = useContext(CartContext)
+    const { cartItems, cartTotal } = useCart()
 
     return (
         <div className="fixed inset-0 z-50 h-full w-full overflow-y-auto bg-gray-600 bg-opacity-50">
