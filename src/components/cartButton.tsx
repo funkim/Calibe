@@ -35,7 +35,7 @@ export function RemoveFromCartButton({ product }: { product: Product }) {
             className="mx-3 font-body"
             onClick={() => removeFromCart(product)}
         >
-            X
+            -
         </button>
     )
 }

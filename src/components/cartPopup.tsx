@@ -56,9 +56,7 @@ export default function CartPopup({ isOpen, onClose }: CartPopupProps) {
                         </div>
                     ))}
                     <p className="font-body">
-                        <p className="font-body">
-                            Total: ${cartTotal(cartItems).toFixed(2)}
-                        </p>
+                        Total: ${cartTotal(cartItems).toFixed(2)}
                     </p>
                 </div>
                 <div className="border-t p-4">
