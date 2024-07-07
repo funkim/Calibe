@@ -16,10 +16,10 @@ export default function Header() {
                         Calibe
                     </Link>
                     <div className="hidden items-center space-x-4 sm:flex">
-                        {['men', 'women', 'accessories'].map((item) => (
+                        {['Men', 'Women', 'Accessories'].map((item) => (
                             <Link
                                 key={item}
-                                href={`/${item}`}
+                                href={`/category/${item}`}
                                 className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-gray-900 hover:border-gray-300"
                             >
                                 {item.charAt(0).toUpperCase() + item.slice(1)}

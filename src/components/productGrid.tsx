@@ -4,37 +4,26 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 import Link from 'next/link'
 import { Product } from './cartButton'
+import { Sidebar } from './sidebar'
 
-export async function fetchStoreItems(): Promise<Product[][]> {
+export const categoryMapping = {
+    Men: "men's clothing",
+    Women: "women's clothing",
+    Accessories: 'jewelery',
+}
+
+const reverseCategoryMapping = Object.fromEntries(
+    Object.entries(categoryMapping).map(([k, v]) => [v, k])
+)
+
+export async function fetchStoreItems(): Promise<Product[]> {
     try {
         const response = await fetch('https://fakestoreapi.com/products')
         if (!response.ok) {
             throw new Error('Network response was not ok')
         }
         const data = await response.json()
-
-        const filteredItems = data.filter(
-            (item: Product) =>
-                item.category === "men's clothing" ||
-                item.category === 'jewelery' ||
-                item.category === "women's clothing"
-        )
-
-        const menItems = data.filter(
-            (item: Product) => item.category === "men's clothing"
-        )
-
-        const womenItems = data.filter(
-            (item: Product) => item.category === "women's clothing"
-        )
-
-        const jeweleryItems = data.filter(
-            (item: Product) => item.category === 'jewelery'
-        )
-
-        const itemlist = [filteredItems, menItems, womenItems, jeweleryItems]
-
-        return itemlist
+        return data
     } catch (error) {
         console.error('Error fetching store items:', error)
         return []
@@ -64,20 +53,28 @@ export function ProductCard({ item }: { item: Product }) {
     )
 }
 
-interface ProductGridProps {
-    category: number
-}
-export default function ProductGrid({ category }: ProductGridProps) {
-    const [items, setItems] = useState<Product[]>([])
+export default function ProductGrid({
+    initialCategory,
+}: {
+    initialCategory: string | null
+}) {
+    const [allItems, setAllItems] = useState<Product[]>([])
+    const [filteredItems, setFilteredItems] = useState<Product[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(
+        initialCategory
+    )
+    const [minRating, setMinRating] = useState(0)
 
     useEffect(() => {
         async function loadItems() {
             setIsLoading(true)
             try {
                 const fetchedItems = await fetchStoreItems()
-                setItems(fetchedItems[category])
+                if (Array.isArray(fetchedItems) && fetchedItems.length > 0) {
+                    setAllItems(fetchedItems.flat())
+                }
             } catch (err) {
                 setError(
                     err instanceof Error
@@ -89,16 +86,46 @@ export default function ProductGrid({ category }: ProductGridProps) {
             }
         }
         loadItems()
-    }, [category])
+    }, [])
+
+    useEffect(() => {
+        setFilteredItems(
+            allItems.filter(
+                (item) =>
+                    (selectedCategory
+                        ? categoryMapping[
+                              selectedCategory as keyof typeof categoryMapping
+                          ] === item.category
+                        : true) && item.rating.rate >= minRating
+            )
+        )
+    }, [allItems, selectedCategory, minRating])
+
+    useEffect(() => {
+        setSelectedCategory(initialCategory)
+    }, [initialCategory])
 
     if (error) {
         return <div>Error: {error}</div>
     }
 
-    console.log(items)
+    const categories = ['Men', 'Women', 'Accessories']
+    const categoryMapping = {
+        Men: "men's clothing",
+        Women: "women's clothing",
+        Accessories: 'jewelery',
+    }
+
     return (
-        <>
-            <div className="bg-white font-body">
+        <div className="flex">
+            <Sidebar
+                categories={Object.keys(categoryMapping)}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                minRating={minRating}
+                setMinRating={setMinRating}
+            />
+            <div className="flex-grow bg-white font-body md:-ml-10 xl:-ml-24">
                 <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
                     <h2 className="sr-only">Products</h2>
                     {isLoading ? (
@@ -106,16 +133,14 @@ export default function ProductGrid({ category }: ProductGridProps) {
                             <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-gray-900"></div>
                         </div>
                     ) : (
-                        <>
-                            <div className="grid grid-cols-1 gap-x-20 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-20">
-                                {items.slice(0, 3).map((item) => (
-                                    <ProductCard key={item.id} item={item} />
-                                ))}
-                            </div>
-                        </>
+                        <div className="grid grid-cols-1 gap-x-20 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-20">
+                            {filteredItems.map((item) => (
+                                <ProductCard key={item.id} item={item} />
+                            ))}
+                        </div>
                     )}
                 </div>
             </div>
-        </>
+        </div>
     )
 }

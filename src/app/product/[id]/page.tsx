@@ -3,6 +3,11 @@ import { Metadata } from 'next'
 import StarRating from '@/components/starRating'
 import { AddToCartButton } from '../../../components/cartButton'
 import { Product } from '../../../components/cartButton'
+import { categoryMapping } from '@/components/productGrid'
+
+const reverseCategoryMapping = Object.fromEntries(
+    Object.entries(categoryMapping).map(([k, v]) => [v, k])
+)
 
 async function getProduct(id: string): Promise<Product> {
     const res = await fetch(`https://fakestoreapi.com/products/${id}`)
