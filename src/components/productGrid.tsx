@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, cache } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 import Link from 'next/link'
@@ -16,19 +16,13 @@ const reverseCategoryMapping = Object.fromEntries(
     Object.entries(categoryMapping).map(([k, v]) => [v, k])
 )
 
-export async function fetchStoreItems(): Promise<Product[]> {
-    try {
-        const response = await fetch('https://fakestoreapi.com/products')
-        if (!response.ok) {
-            throw new Error('Network response was not ok')
-        }
-        const data = await response.json()
-        return data
-    } catch (error) {
-        console.error('Error fetching store items:', error)
-        return []
-    }
-}
+const fetchStoreItems = cache(async (): Promise<Product[]> => {
+    const res = await fetch('https://fakestoreapi.com/products', {
+        next: { revalidate: 3600 },
+    })
+    if (!res.ok) throw new Error('Network response was not ok')
+    return res.json()
+})
 
 export function ProductCard({ item }: { item: Product }) {
     return (

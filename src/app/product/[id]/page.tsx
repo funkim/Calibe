@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { Metadata } from 'next'
+import { cache } from 'react'
 import StarRating from '@/components/starRating'
 import { AddToCartButton } from '../../../components/cartButton'
 import { Product } from '../../../components/cartButton'
@@ -9,12 +10,13 @@ const reverseCategoryMapping = Object.fromEntries(
     Object.entries(categoryMapping).map(([k, v]) => [v, k])
 )
 
-async function getProduct(id: string): Promise<Product> {
-    const res = await fetch(`https://fakestoreapi.com/products/${id}`)
+const getProduct = cache(async (id: string): Promise<Product> => {
+    const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
+        next: { revalidate: 3600 },
+    })
     if (!res.ok) throw new Error('Failed to fetch product')
     return res.json()
-}
-
+})
 export async function generateMetadata({
     params,
 }: {
