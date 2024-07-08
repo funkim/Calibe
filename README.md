@@ -2,6 +2,7 @@
 A Fake E-Commerce Webpage with the use of Fake Store API items. 
 
 Built using Next.JS, TailwindCSS, React, and Typescript.
+Designed using Figma.
 
 ![home](https://github.com/funkim/Calibe/assets/148171304/82ee235f-6fe0-470d-9f95-478621295eb2)
 ![product](https://github.com/funkim/Calibe/assets/148171304/52b2371a-4e20-4f17-97c6-e422d6acedd1)
