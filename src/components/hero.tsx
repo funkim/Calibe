@@ -29,7 +29,7 @@ export default function Hero() {
                             <div className="sm:justify-justify-start mt-5 sm:mt-8 sm:flex">
                                 <div className="rounded-md shadow">
                                     <Link
-                                        href="#"
+                                        href="/category/Men"
                                         className="flex w-full items-center justify-center rounded-md border border-transparent bg-white px-8 py-3 font-title text-base text-black hover:bg-slate-200 md:px-10 md:py-4 md:text-lg"
                                     >
                                         Start Exploring
