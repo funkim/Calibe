@@ -14,10 +14,6 @@ const config: Config = {
             body: ['Supreme-Regular'],
         },
         extend: {
-            backgroundImage: {
-                'hero-image':
-                    "url('/images/jezael-melgoza-lBxfCWszr8o-unsplash.webp')",
-            },
             keyframes: {
                 enter: {
                     '0%': { transform: 'translateX(-100%)' },

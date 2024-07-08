@@ -1,7 +1,20 @@
+import Image from 'next/image'
+import Link from 'next/link'
 export default function Hero() {
     return (
         <div className="relative overflow-hidden">
-            <div className="bg-hero-image relative mx-auto mt-11 max-w-7xl bg-cover pb-6 pt-8 sm:pb-12 sm:pt-16 md:pb-20 md:pt-20 lg:pb-24 lg:pt-40 xl:pb-32 xl:pt-40">
+            <div className="relative mx-auto mt-11 max-w-7xl pb-6 pt-8 sm:pb-12 sm:pt-16 md:pb-20 md:pt-20 lg:pb-24 lg:pt-40 xl:pb-32 xl:pt-40">
+                <Image
+                    src="/images/jezael-melgoza-lBxfCWszr8o-unsplash.webp"
+                    alt="Hero background"
+                    quality={100}
+                    fill
+                    sizes="100vw"
+                    priority
+                    style={{
+                        objectFit: 'cover',
+                    }}
+                />
                 <div className="absolute inset-0 bg-black bg-opacity-10"></div>
                 <div className="relative lg:w-full lg:max-w-2xl">
                     <main className="mx-auto mt-10 max-w-7xl px-4 sm:mt-12 sm:px-6 lg:px-8 lg:pl-24">
@@ -15,12 +28,12 @@ export default function Hero() {
                             </p>
                             <div className="sm:justify-justify-start mt-5 sm:mt-8 sm:flex">
                                 <div className="rounded-md shadow">
-                                    <a
+                                    <Link
                                         href="#"
                                         className="flex w-full items-center justify-center rounded-md border border-transparent bg-white px-8 py-3 font-title text-base text-black hover:bg-slate-200 md:px-10 md:py-4 md:text-lg"
                                     >
                                         Start Exploring
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
