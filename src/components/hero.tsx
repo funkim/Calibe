@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+
 export default function Hero() {
     return (
         <div className="relative overflow-hidden">
@@ -7,7 +8,7 @@ export default function Hero() {
                 <Image
                     src="/images/jezael-melgoza-lBxfCWszr8o-unsplash.webp"
                     alt="Hero background"
-                    quality={100}
+                    quality={80}
                     fill
                     sizes="100vw"
                     priority

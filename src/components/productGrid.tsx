@@ -103,13 +103,6 @@ export default function ProductGrid({
         return <div>Error: {error}</div>
     }
 
-    const categories = ['Men', 'Women', 'Accessories']
-    const categoryMapping = {
-        Men: "men's clothing",
-        Women: "women's clothing",
-        Accessories: 'jewelery',
-    }
-
     return (
         <div className="flex">
             <Sidebar
