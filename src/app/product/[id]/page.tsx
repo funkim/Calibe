@@ -40,13 +40,15 @@ export default async function ProductPage({
             <div className="container mx-auto px-4 py-8">
                 <div className="flex flex-col md:flex-row">
                     <div className="md:w-1/2">
-                        <Image
-                            src={product.image}
-                            alt={product.title}
-                            width={500}
-                            height={500}
-                            className="rounded-lg"
-                        />
+                        <div className="relative mx-auto aspect-square w-full max-w-[500px]">
+                            <Image
+                                src={product.image}
+                                alt={product.title}
+                                fill
+                                className="rounded-lg object-contain"
+                                sizes="(max-width: 768px) 100vw, 500px"
+                            />
+                        </div>
                     </div>
                     <div className="mt-4 flex flex-col justify-center md:mt-0 md:w-1/2 md:pl-8">
                         <h1 className="mb-4 font-title text-3xl">
