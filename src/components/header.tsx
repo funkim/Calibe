@@ -2,11 +2,12 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import CartPopup from './cartPopup'
+import { useCart } from './cartContext'
 
 export default function Header() {
     const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false)
-    const [isCartOpen, setIsCartOpen] = useState<boolean>(false)
     const [isItemAdded, setIsItemAdded] = useState<boolean>(false)
+    const { openCart } = useCart()
 
     return (
         <header className="bg-white shadow-sm">
@@ -51,7 +52,7 @@ export default function Header() {
                         <button
                             type="button"
                             className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:text-gray-500"
-                            onClick={() => setIsCartOpen(true)}
+                            onClick={openCart}
                         >
                             <span className="sr-only">View Cart</span>
                             <svg
@@ -79,10 +80,7 @@ export default function Header() {
                     </div>
                 ) : null}
             </div>
-            <CartPopup
-                isOpen={isCartOpen}
-                onClose={() => setIsCartOpen(false)}
-            />
+            <CartPopup />
         </header>
     )
 }
